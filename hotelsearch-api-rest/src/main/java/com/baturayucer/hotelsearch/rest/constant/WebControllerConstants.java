@@ -1,6 +1,6 @@
 package com.baturayucer.hotelsearch.rest.constant;
 
-public class WebControllerConstants {
+public final class WebControllerConstants {
 
     public static final String HOTEL_SEARCH_API = "/hotel-search-api";
     public static final String SEARCH = "/search";
