@@ -33,7 +33,7 @@ public final class DataReader {
         return (List<City>) (Object) read(target, City.class);
     }
 
-    public static List<Object> read(String target, Class<?> type) throws IOException {
+    private static List<Object> read(String target, Class<?> type) throws IOException {
 
         File csvFile = new File(target);
 

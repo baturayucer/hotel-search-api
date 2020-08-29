@@ -1,6 +1,6 @@
 package com.baturayucer.hotelsearch.data.constant;
 
-public final class DataReaderConstants {
+public class DataReaderConstants {
 
     private static final String RESOURCES = "src/main/resources/";
     public static final String ADVERTISERS = RESOURCES + "advertisers.csv";
@@ -8,5 +8,7 @@ public final class DataReaderConstants {
     public static final String HOTEL_ADVERTISERS = RESOURCES + "hotel_advertiser.csv";
     public static final String HOTELS = RESOURCES + "hotels.csv";
 
-    private DataReaderConstants() {}
+    private DataReaderConstants() throws IllegalAccessException {
+        throw new IllegalAccessException("This is a constant class.");
+    }
 }
