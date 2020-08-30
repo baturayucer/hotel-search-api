@@ -131,13 +131,18 @@ public class SearchServiceImpl implements SearchService {
 
     private void updateHotelAdvert(UpdatePricesDto updatePricesDto) {
 
-        hotelAdvertisers.parallelStream().forEach(ad -> {
-            if(ad.getAdvertiserId().equals(updatePricesDto.getAdvertiserId()) &&
-                    ad.getHotelId().equals(updatePricesDto.getHotelId())) {
-                ad.setPrice(updatePricesDto.getPrice());
-            } else {
-                throw new RuntimeException("Could not update");
-            }
+        final boolean[] updated = {false};
+        hotelAdvertisers.parallelStream()
+                .filter(ad -> ad.getAdvertiserId().equals(updatePricesDto.getAdvertiserId()) &&
+                ad.getHotelId().equals(updatePricesDto.getHotelId())).
+                forEach(advertiser -> {
+            advertiser.setPrice(updatePricesDto.getPrice());
+            updated[0] = true;
+            logger.info("Advertiser updated with the Id:{}", advertiser.getAdvertiserId());
         });
+
+        if(!updated[0]) {
+            throw new RuntimeException("Could Not Update");
+        }
     }
 }
