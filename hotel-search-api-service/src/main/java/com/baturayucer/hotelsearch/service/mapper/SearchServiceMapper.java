@@ -4,13 +4,15 @@ import com.baturayucer.hotelsearch.data.model.AdvertiserEntity;
 import com.baturayucer.hotelsearch.data.model.CityEntity;
 import com.baturayucer.hotelsearch.data.model.HotelAdvertiserEntity;
 import com.baturayucer.hotelsearch.data.model.HotelEntity;
-import com.baturayucer.hotelsearch.service.model.AdvertiserDto;
-import com.baturayucer.hotelsearch.service.model.CityDto;
-import com.baturayucer.hotelsearch.service.model.HotelAdvertiserDto;
-import com.baturayucer.hotelsearch.service.model.HotelDto;
+import com.baturayucer.hotelsearch.service.model.*;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Named;
 import org.mapstruct.factory.Mappers;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @Mapper
@@ -20,6 +22,20 @@ public interface SearchServiceMapper {
 
     List<AdvertiserDto> toAdvertiserDtoList(List<AdvertiserEntity> advertiserEntities);
     List<CityDto> toCityDtoList(List<CityEntity> cityEntities);
-    List<HotelAdvertiserDto> toHotelAdvertiserDtoList(List<HotelAdvertiserEntity> hotelAdvertiserEntities);
     List<HotelDto> toHotelDtoList(List<HotelEntity> hotelEntities);
+    List<HotelAdvertiserDto> toHotelAdvertiserDtoList(List<HotelAdvertiserEntity> hotelAdvertiserEntities);
+
+    default Date stringToDate(String date) throws ParseException {
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+        return sdf.parse(date);
+    }
+
+    @Mapping(source = "id", target = "hotelId")
+    @Mapping(source = "name", target = "hotelName")
+    @Mapping(source = "rating", target = "rating")
+    @Mapping(source = "stars", target = "stars")
+    SearchOutputDto toSearchOutputDto(HotelDto hotelDto);
+
+    Offer toOffer(HotelAdvertiserDto hotelAdvertiserDto);
 }
