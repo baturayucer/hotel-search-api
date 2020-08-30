@@ -3,7 +3,9 @@ package com.baturayucer.hotelsearch.service;
 import com.baturayucer.hotelsearch.service.model.SearchItemDto;
 import com.baturayucer.hotelsearch.service.model.SearchOutputDto;
 
+import java.util.List;
+
 public interface SearchService {
 
-    SearchOutputDto searchDeals(SearchItemDto searchItemDto);
+    List<SearchOutputDto> searchDeals(SearchItemDto searchItemDto);
 }

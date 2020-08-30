@@ -13,7 +13,10 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import static com.baturayucer.hotelsearch.data.constant.DataReaderConstants.*;
 
@@ -54,7 +57,28 @@ public class SearchServiceImpl implements SearchService {
     }
 
     @Override
-    public SearchOutputDto searchDeals(SearchItemDto searchItemDto) {
-        return new SearchOutputDto();
+    public List<SearchOutputDto> searchDeals(SearchItemDto searchItemDto) {
+
+        List<SearchOutputDto> outputDtoList = new ArrayList<>();
+
+        hotelDtos.parallelStream().filter(hotelDto -> {
+
+            String foundCityId = cityDtos.parallelStream().
+                    filter(cityDto -> cityDto.getId().equals(hotelDto.getCityId()))
+                    .findAny().orElseThrow(RuntimeException::new).getId();
+
+            return hotelDto.getCityId().equals(foundCityId);
+        }).forEachOrdered(hotelDto -> {
+
+            //TODO: mapstruct
+            SearchOutputDto searchOutputDto = new SearchOutputDto();
+            searchOutputDto.setHotelId(hotelDto.getId());
+            searchOutputDto.setHotelName(hotelDto.getName());
+            searchOutputDto.setRating(hotelDto.getRating());
+            searchOutputDto.setStars(hotelDto.getStars());
+            outputDtoList.add(searchOutputDto);
+        });
+
+        return outputDtoList;
     }
 }
