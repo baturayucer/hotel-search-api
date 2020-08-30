@@ -1,31 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>2.3.3.RELEASE</version>
         <relativePath/>
     </parent>
-    <groupId>com.baturayucer.hotelsearch</groupId>
-    <artifactId>hotelsearch-api</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-    <name>hotelsearch-api</name>
-    <description>Simple Hotel Search Api</description>
 
-    <properties>
-        <java.version>1.8</java.version>
-        <start-class>com.baturayucer.hotelsearch.app.HotelSearchApi</start-class>
-    </properties>
+    <groupId>com.baturayucer.hotelsearch</groupId>
+    <artifactId>hotel-search-api</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+    <name>HotelSearch Api</name>
+    <description>Simple Hotel Search Api</description>
 
     <packaging>pom</packaging>
 
+    <properties>
+        <java.version>1.8</java.version>
+    </properties>
+
     <modules>
-        <module>hotelsearch-api-app</module>
-        <module>hotelsearch-api-data</module>
-        <module>hotelsearch-api-rest</module>
-        <module>hotelsearch-api-service</module>
+        <module>hotel-search-api-app</module>
+        <module>hotel-search-api-data</module>
+        <module>hotel-search-api-rest</module>
+        <module>hotel-search-api-service</module>
     </modules>
 
     <dependencies>
@@ -58,12 +61,11 @@
             <version>2.11.2</version>
         </dependency>
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.12</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <version>2.3.3.RELEASE</version>
             <scope>test</scope>
         </dependency>
-
     </dependencies>
 
 </project>
