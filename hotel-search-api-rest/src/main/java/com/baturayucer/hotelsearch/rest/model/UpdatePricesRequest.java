@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serializable;
-import java.util.Date;
 
 @Getter
 @Setter
@@ -16,6 +15,6 @@ public class UpdatePricesRequest implements Serializable {
     private String cpc;
     private String price;
     private String currency;
-    private Date availabilityStartDate;
-    private Date availabilityEndDate;
+    private String availabilityStartDate;
+    private String availabilityEndDate;
 }

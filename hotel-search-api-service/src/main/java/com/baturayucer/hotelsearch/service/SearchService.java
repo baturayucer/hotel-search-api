@@ -9,5 +9,5 @@ import java.util.List;
 public interface SearchService {
 
     List<SearchOutputDto> searchDeals(SearchItemDto searchItemDto);
-    List<UpdatePricesDto> updatePrices(UpdatePricesDto updatePricesDto);
+    List<UpdatePricesDto> updatePrices(List<UpdatePricesDto> updatePricesDto);
 }
