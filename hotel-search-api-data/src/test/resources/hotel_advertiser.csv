@@ -1,0 +1,5 @@
+advertiser_id,hotel_id,cpc,price,currency,availability_start_date,availability_end_date
+23,0,178,245,EUR,20200721,20201020
+36,0,173,260,EUR,20200802,20200815
+27,0,443,111,EUR,20200727,20200907
+67,1,548,519,EUR,20200802,20201006
