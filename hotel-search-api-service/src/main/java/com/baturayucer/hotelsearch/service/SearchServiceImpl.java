@@ -4,6 +4,8 @@ import com.baturayucer.hotelsearch.data.DataReader;
 import com.baturayucer.hotelsearch.data.exception.DataNotFoundException;
 import com.baturayucer.hotelsearch.service.mapper.SearchServiceMapper;
 import com.baturayucer.hotelsearch.service.model.*;
+import com.baturayucer.hotelsearch.service.util.SearchUtils;
+import com.baturayucer.hotelsearch.service.util.UpdateUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +41,51 @@ public class SearchServiceImpl implements SearchService {
 
     @EventListener(ApplicationStartedEvent.class)
     public void loadData() {
+        loadInitialData();
+    }
+
+    @Override
+    public List<SearchOutputDto> searchDeals(SearchItemDto searchItemDto) {
+
+        List<SearchOutputDto> searchOutputs = new ArrayList<>();
+
+        Comparator<Offer> compareByPriceAndCpc =
+                Comparator.comparing(Offer::getPrice).thenComparing(Offer::getCpc);
+
+        Comparator<SearchOutputDto> compareByRating =
+                Comparator.comparing(SearchOutputDto::getRating);
+
+        List<HotelDto> filteredHotels = SearchUtils.filterHotelsByCity(hotels, cities);
+
+        filteredHotels.parallelStream().forEach(hotelDto -> {
+
+            List<Offer> availableOffers = SearchUtils.findAvailableHotelOffers(
+                    hotelAdvertisers, advertisers, hotelDto, searchItemDto);
+
+            //Set filtered hotels to output.
+            SearchOutputDto searchOutputDto =
+                    searchServiceMapper.toSearchOutputDto(hotelDto);
+            availableOffers.sort(compareByPriceAndCpc);
+            //Set related offers to output.
+            searchOutputDto.setOffers(availableOffers);
+            searchOutputs.add(searchOutputDto);
+        });
+
+        searchOutputs.sort(compareByRating);
+        return searchOutputs;
+    }
+
+    @Override
+    public List<UpdatePricesDto> updatePrices(List<UpdatePricesDto> updatePricesDtoList) {
+
+        updatePricesDtoList.parallelStream().forEach(
+                updatePricesDto -> UpdateUtils
+                        .updateHotelAdvert(hotelAdvertisers, updatePricesDto));
+        return updatePricesDtoList;
+    }
+
+    private void loadInitialData() {
+
         try {
             advertisers = searchServiceMapper
                     .toAdvertiserDtoList(dataReader.readAdvertisers(ADVERTISERS));
@@ -52,97 +99,6 @@ public class SearchServiceImpl implements SearchService {
         } catch (IOException e) {
             logger.error("Something went wrong while reading data", e);
             throw new DataNotFoundException("Could not found data");
-        }
-    }
-
-    @Override
-    public List<SearchOutputDto> searchDeals(SearchItemDto searchItemDto) {
-
-        Comparator<Offer> compareByPriceAndCpc =
-                Comparator.comparing(Offer::getPrice).thenComparing(Offer::getCpc);
-
-        Comparator<SearchOutputDto> compareByRating =
-                Comparator.comparing(SearchOutputDto::getRating);
-
-        List<SearchOutputDto> outputDtoList = new ArrayList<>();
-
-        List<HotelDto> filteredHotelsByCity = filterHotelsByCity(hotels);
-
-        filteredHotelsByCity.parallelStream().forEach(hotelDto -> {
-
-            List<Offer> availableOffers =
-                    findAvailableHotelOffers(hotelAdvertisers, hotelDto, searchItemDto);
-            SearchOutputDto searchOutputDto =
-                    searchServiceMapper.toSearchOutputDto(hotelDto);
-            availableOffers.sort(compareByPriceAndCpc);
-            searchOutputDto.setOffers(availableOffers);
-            outputDtoList.add(searchOutputDto);
-        });
-
-        outputDtoList.sort(compareByRating);
-        return outputDtoList;
-    }
-
-    @Override
-    public List<UpdatePricesDto> updatePrices(List<UpdatePricesDto> updatePricesDtoList) {
-
-        updatePricesDtoList.parallelStream().forEach(this::updateHotelAdvert);
-        return updatePricesDtoList;
-    }
-
-    private List<HotelDto> filterHotelsByCity(List<HotelDto> hotels) {
-
-        return hotels.parallelStream().filter(hotelDto -> {
-            String foundCityId = findCityByHotel(cities, hotelDto).getId();
-            return hotelDto.getCityId().equals(foundCityId);
-        }).collect(Collectors.toList());
-    }
-
-    private CityDto findCityByHotel(List<CityDto> cities, HotelDto hotelDto) {
-
-        return cities.parallelStream().
-                filter(cityDto -> cityDto.getId().equals(hotelDto.getCityId()))
-                .findAny().orElseThrow(RuntimeException::new);
-    }
-
-    private List<Offer> findAvailableHotelOffers(
-            List<HotelAdvertiserDto> hotelAdvertisers, HotelDto hotelDto, SearchItemDto searchItemDto) {
-
-        List<Offer> offerList = new ArrayList<>();
-
-        hotelAdvertisers.parallelStream().forEach(ad ->  {
-            if (ad.getHotelId().equals(hotelDto.getId()) &&
-                    searchItemDto.getStartDate().after(ad.getAvailabilityStartDate()) &&
-                    searchItemDto.getStartDate().before(ad.getAvailabilityEndDate())) {
-                Offer offer = searchServiceMapper.toOffer(ad);
-                offer.setAdvertiser(findAdvertiserNameById(advertisers, ad.getAdvertiserId()));
-                offerList.add(offer);
-            }
-        });
-        return offerList;
-    }
-
-    private String findAdvertiserNameById(List<AdvertiserDto> advertisers, String advertiserId) {
-
-        return advertisers.parallelStream()
-                .filter(advert -> advert.getId().equals(advertiserId))
-                .findAny().orElseThrow(RuntimeException::new).getAdvertiserName();
-    }
-
-    private void updateHotelAdvert(UpdatePricesDto updatePricesDto) {
-
-        final boolean[] updated = {false};
-        hotelAdvertisers.parallelStream()
-                .filter(ad -> ad.getAdvertiserId().equals(updatePricesDto.getAdvertiserId()) &&
-                ad.getHotelId().equals(updatePricesDto.getHotelId())).
-                forEach(advertiser -> {
-            advertiser.setPrice(updatePricesDto.getPrice());
-            updated[0] = true;
-            logger.info("Advertiser updated with the Id:{}", advertiser.getAdvertiserId());
-        });
-
-        if(!updated[0]) {
-            throw new RuntimeException("Could Not Update");
         }
     }
 }
