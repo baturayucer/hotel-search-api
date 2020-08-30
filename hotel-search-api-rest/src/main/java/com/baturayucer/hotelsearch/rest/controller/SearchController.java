@@ -1,4 +1,4 @@
-package com.baturayucer.hotelsearch.rest;
+package com.baturayucer.hotelsearch.rest.controller;
 
 import com.baturayucer.hotelsearch.rest.model.SearchItemResponse;
 import com.baturayucer.hotelsearch.rest.model.UpdatePricesRequest;
