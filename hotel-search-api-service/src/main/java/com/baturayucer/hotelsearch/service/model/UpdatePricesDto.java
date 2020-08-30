@@ -7,7 +7,7 @@ import java.util.Date;
 
 @Getter
 @Setter
-public class HotelAdvertiserDto {
+public class UpdatePricesDto {
 
     private String advertiserId;
     private String hotelId;

@@ -2,6 +2,8 @@ package com.baturayucer.hotelsearch.rest;
 
 import com.baturayucer.hotelsearch.rest.mapper.SearchItemMapper;
 import com.baturayucer.hotelsearch.rest.model.SearchItemResponse;
+import com.baturayucer.hotelsearch.rest.model.UpdatePricesRequest;
+import com.baturayucer.hotelsearch.rest.model.UpdatePricesResponse;
 import com.baturayucer.hotelsearch.service.SearchService;
 import com.baturayucer.hotelsearch.service.model.SearchOutputDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,10 +24,19 @@ public class SearchControllerImpl implements SearchController {
     }
 
     @Override
-    public ResponseEntity<List<SearchItemResponse>> searchDeals(String city, String startDate, String endDate) {
+    public ResponseEntity<List<SearchItemResponse>> searchDeals(
+            String city, String startDate, String endDate) {
 
-        List<SearchOutputDto> searchOutputDto =
-                searchService.searchDeals(searchItemMapper.toItemDto(city, startDate, endDate));
-        return ResponseEntity.ok(searchItemMapper.toItemResponse(searchOutputDto));
+        List<SearchOutputDto> searchOutputDto = searchService
+                .searchDeals(searchItemMapper
+                        .toItemDto(city, startDate, endDate));
+        return ResponseEntity.ok(
+                searchItemMapper.toItemResponse(searchOutputDto));
+    }
+
+    @Override
+    public ResponseEntity<List<UpdatePricesResponse>> updatePrices(
+            UpdatePricesRequest updatePricesRequest) {
+        return null;
     }
 }

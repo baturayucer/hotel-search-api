@@ -11,11 +11,10 @@ import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import static com.baturayucer.hotelsearch.data.constant.DataReaderConstants.*;
@@ -28,10 +27,10 @@ public class SearchServiceImpl implements SearchService {
 
     private DataReader dataReader;
 
-    private List<AdvertiserDto> advertiserDtos;
-    private List<CityDto> cityDtos;
-    private List<HotelAdvertiserDto> hotelAdvertiserDtos;
-    private List<HotelDto> hotelDtos;
+    private List<AdvertiserDto> advertisers;
+    private List<CityDto> cities;
+    private List<HotelAdvertiserDto> hotelAdvertisers;
+    private List<HotelDto> hotels;
 
     @Autowired
     public SearchServiceImpl(DataReader dataReader) {
@@ -41,15 +40,15 @@ public class SearchServiceImpl implements SearchService {
     @EventListener(ApplicationStartedEvent.class)
     public void loadData() {
         try {
-            advertiserDtos = searchServiceMapper
+            advertisers = searchServiceMapper
                     .toAdvertiserDtoList(dataReader.readAdvertisers(ADVERTISERS));
-            cityDtos = searchServiceMapper
+            cities = searchServiceMapper
                     .toCityDtoList(dataReader.readCities(CITIES));
-            hotelAdvertiserDtos = searchServiceMapper
+            hotelAdvertisers = searchServiceMapper
                     .toHotelAdvertiserDtoList(dataReader.readHotelAdvertisers(HOTEL_ADVERTISERS));
-            hotelDtos = searchServiceMapper
+            hotels = searchServiceMapper
                     .toHotelDtoList(dataReader.readHotels(HOTELS));
-            logger.info("Data fetched.");
+            logger.info("Fetched all data.");
         } catch (IOException e) {
             logger.error("Something went wrong while reading data", e);
             throw new DataNotFoundException("Could not found data");
@@ -59,26 +58,72 @@ public class SearchServiceImpl implements SearchService {
     @Override
     public List<SearchOutputDto> searchDeals(SearchItemDto searchItemDto) {
 
+        Comparator<Offer> compareByPriceAndCpc =
+                Comparator.comparing(Offer::getPrice).thenComparing(Offer::getCpc);
+
+        Comparator<SearchOutputDto> compareByRating =
+                Comparator.comparing(SearchOutputDto::getRating);
+
         List<SearchOutputDto> outputDtoList = new ArrayList<>();
 
-        hotelDtos.parallelStream().filter(hotelDto -> {
+        List<HotelDto> filteredHotelsByCity = filterHotelsByCity(hotels);
 
-            String foundCityId = cityDtos.parallelStream().
-                    filter(cityDto -> cityDto.getId().equals(hotelDto.getCityId()))
-                    .findAny().orElseThrow(RuntimeException::new).getId();
+        filteredHotelsByCity.parallelStream().forEach(hotelDto -> {
 
-            return hotelDto.getCityId().equals(foundCityId);
-        }).forEachOrdered(hotelDto -> {
-
-            //TODO: mapstruct
-            SearchOutputDto searchOutputDto = new SearchOutputDto();
-            searchOutputDto.setHotelId(hotelDto.getId());
-            searchOutputDto.setHotelName(hotelDto.getName());
-            searchOutputDto.setRating(hotelDto.getRating());
-            searchOutputDto.setStars(hotelDto.getStars());
+            List<Offer> availableOffers =
+                    findAvailableHotelOffers(hotelAdvertisers, hotelDto, searchItemDto);
+            SearchOutputDto searchOutputDto =
+                    searchServiceMapper.toSearchOutputDto(hotelDto);
+            availableOffers.sort(compareByPriceAndCpc);
+            searchOutputDto.setOffers(availableOffers);
             outputDtoList.add(searchOutputDto);
         });
 
+        outputDtoList.sort(compareByRating);
         return outputDtoList;
+    }
+
+    @Override
+    public List<UpdatePricesDto> updatePrices(UpdatePricesDto updatePricesDto) {
+        return null;
+    }
+
+    private List<HotelDto> filterHotelsByCity(List<HotelDto> hotels) {
+
+        return hotels.parallelStream().filter(hotelDto -> {
+            String foundCityId = findCityByHotel(cities, hotelDto).getId();
+            return hotelDto.getCityId().equals(foundCityId);
+        }).collect(Collectors.toList());
+    }
+
+    private CityDto findCityByHotel(List<CityDto> cities, HotelDto hotelDto) {
+
+        return cities.parallelStream().
+                filter(cityDto -> cityDto.getId().equals(hotelDto.getCityId()))
+                .findAny().orElseThrow(RuntimeException::new);
+    }
+
+    private List<Offer> findAvailableHotelOffers(
+            List<HotelAdvertiserDto> hotelAdvertisers, HotelDto hotelDto, SearchItemDto searchItemDto) {
+
+        List<Offer> offerList = new ArrayList<>();
+
+        hotelAdvertisers.parallelStream().forEach(ad ->  {
+            if (ad.getHotelId().equals(hotelDto.getId()) &&
+                    searchItemDto.getStartDate().after(ad.getAvailabilityStartDate()) &&
+                    searchItemDto.getStartDate().before(ad.getAvailabilityEndDate())) {
+                Offer offer = searchServiceMapper.toOffer(ad);
+                offer.setAdvertiser(findAdvertiserNameById(advertisers, ad.getAdvertiserId()));
+                offerList.add(offer);
+            }
+        });
+        return offerList;
+    }
+
+    private String findAdvertiserNameById(List<AdvertiserDto> advertisers, String advertiserId) {
+
+        return advertisers.parallelStream()
+                .filter(advert -> advert.getId().equals(advertiserId))
+                .findAny().orElseThrow(RuntimeException::new).getAdvertiserName();
     }
 }
