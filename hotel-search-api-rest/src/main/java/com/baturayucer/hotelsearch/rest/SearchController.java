@@ -24,5 +24,5 @@ public interface SearchController {
 
     @PostMapping(value = PRICE)
     ResponseEntity<List<UpdatePricesResponse>> updatePrices(
-            @RequestBody UpdatePricesRequest updatePricesRequest);
+            @RequestBody List<UpdatePricesRequest> updatePricesRequest);
 }

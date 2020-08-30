@@ -84,8 +84,10 @@ public class SearchServiceImpl implements SearchService {
     }
 
     @Override
-    public List<UpdatePricesDto> updatePrices(UpdatePricesDto updatePricesDto) {
-        return null;
+    public List<UpdatePricesDto> updatePrices(List<UpdatePricesDto> updatePricesDtoList) {
+
+        updatePricesDtoList.parallelStream().forEach(this::updateHotelAdvert);
+        return updatePricesDtoList;
     }
 
     private List<HotelDto> filterHotelsByCity(List<HotelDto> hotels) {
@@ -125,5 +127,17 @@ public class SearchServiceImpl implements SearchService {
         return advertisers.parallelStream()
                 .filter(advert -> advert.getId().equals(advertiserId))
                 .findAny().orElseThrow(RuntimeException::new).getAdvertiserName();
+    }
+
+    private void updateHotelAdvert(UpdatePricesDto updatePricesDto) {
+
+        hotelAdvertisers.parallelStream().forEach(ad -> {
+            if(ad.getAdvertiserId().equals(updatePricesDto.getAdvertiserId()) &&
+                    ad.getHotelId().equals(updatePricesDto.getHotelId())) {
+                ad.setPrice(updatePricesDto.getPrice());
+            } else {
+                throw new RuntimeException("Could not update");
+            }
+        });
     }
 }

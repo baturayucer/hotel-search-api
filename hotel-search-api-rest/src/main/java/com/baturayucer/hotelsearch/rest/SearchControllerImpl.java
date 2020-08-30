@@ -6,6 +6,7 @@ import com.baturayucer.hotelsearch.rest.model.UpdatePricesRequest;
 import com.baturayucer.hotelsearch.rest.model.UpdatePricesResponse;
 import com.baturayucer.hotelsearch.service.SearchService;
 import com.baturayucer.hotelsearch.service.model.SearchOutputDto;
+import com.baturayucer.hotelsearch.service.model.UpdatePricesDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
@@ -36,7 +37,11 @@ public class SearchControllerImpl implements SearchController {
 
     @Override
     public ResponseEntity<List<UpdatePricesResponse>> updatePrices(
-            UpdatePricesRequest updatePricesRequest) {
-        return null;
+            List<UpdatePricesRequest> updatePricesRequest) {
+        List<UpdatePricesDto> updatePricesDtos =
+                searchService.updatePrices(
+                        searchItemMapper.toUpdatePricesDto(updatePricesRequest));
+        return ResponseEntity.ok(searchItemMapper
+                .toUpdatePricesResponse(updatePricesDtos));
     }
 }

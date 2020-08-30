@@ -1,8 +1,11 @@
 package com.baturayucer.hotelsearch.rest.mapper;
 
 import com.baturayucer.hotelsearch.rest.model.SearchItemResponse;
+import com.baturayucer.hotelsearch.rest.model.UpdatePricesRequest;
+import com.baturayucer.hotelsearch.rest.model.UpdatePricesResponse;
 import com.baturayucer.hotelsearch.service.model.SearchItemDto;
 import com.baturayucer.hotelsearch.service.model.SearchOutputDto;
+import com.baturayucer.hotelsearch.service.model.UpdatePricesDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
@@ -24,6 +27,11 @@ public interface SearchItemMapper {
     SearchItemDto toItemDto(String city, String startDate, String endDate);
 
     List<SearchItemResponse> toItemResponse(List<SearchOutputDto> searchOutputDto);
+
+    List<UpdatePricesDto> toUpdatePricesDto(List<UpdatePricesRequest> updatePricesRequest);
+
+    List<UpdatePricesResponse> toUpdatePricesResponse(List<UpdatePricesDto> updatePricesDtos);
+
 
     @Named("stringToDate")
     default Date stringToDate(String date) throws ParseException {
