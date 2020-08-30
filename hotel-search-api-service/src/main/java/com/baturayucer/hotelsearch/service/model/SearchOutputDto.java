@@ -13,7 +13,7 @@ public class SearchOutputDto {
 
     private String hotelId;
     private String hotelName;
-    private int rating;
-    private int stars;
+    private String rating;
+    private String stars;
     private List<Offer> offers;
 }

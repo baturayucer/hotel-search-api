@@ -1,14 +1,14 @@
 package com.baturayucer.hotelsearch.rest;
 
 import com.baturayucer.hotelsearch.rest.mapper.SearchItemMapper;
-import com.baturayucer.hotelsearch.rest.model.SearchItemRequest;
 import com.baturayucer.hotelsearch.rest.model.SearchItemResponse;
 import com.baturayucer.hotelsearch.service.SearchService;
 import com.baturayucer.hotelsearch.service.model.SearchOutputDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 public class SearchControllerImpl implements SearchController {
@@ -22,10 +22,10 @@ public class SearchControllerImpl implements SearchController {
     }
 
     @Override
-    public ResponseEntity<SearchItemResponse> searchDeals(@RequestParam SearchItemRequest searchRequest) {
+    public ResponseEntity<List<SearchItemResponse>> searchDeals(String city, String startDate, String endDate) {
 
-        SearchOutputDto searchOutputDto =
-                searchService.searchDeals(searchItemMapper.toItemDto(searchRequest));
+        List<SearchOutputDto> searchOutputDto =
+                searchService.searchDeals(searchItemMapper.toItemDto(city, startDate, endDate));
         return ResponseEntity.ok(searchItemMapper.toItemResponse(searchOutputDto));
     }
 }
