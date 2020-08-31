@@ -5,6 +5,10 @@ import lombok.Setter;
 
 import java.util.Date;
 
+/**
+ * Dto object for HotelAdvertiser.
+ * @author baturayucer.
+ */
 @Getter
 @Setter
 public class HotelAdvertiserDto {

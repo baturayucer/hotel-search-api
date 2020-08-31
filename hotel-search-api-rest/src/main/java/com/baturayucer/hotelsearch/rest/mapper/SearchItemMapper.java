@@ -16,6 +16,11 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+
+/**
+ * Mapper class for Search Api.
+ * @author baturayucer.
+ */
 @Mapper
 public interface SearchItemMapper {
 

@@ -5,6 +5,10 @@ import lombok.Setter;
 
 import java.util.Date;
 
+/**
+ * Dto object for SearchItem.
+ * @author baturayucer.
+ */
 @Getter
 @Setter
 public class SearchItemDto {

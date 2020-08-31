@@ -1,13 +1,12 @@
 package com.baturayucer.hotelsearch.app;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.ApplicationContext;
 
-import java.util.Arrays;
-
+/**
+ * Main class for Spring Boot Application.
+ * @author baturayucer.
+ */
 @SpringBootApplication(scanBasePackages = "com.baturayucer")
 public class HotelSearchApi {
     public static void main(String[] args) {

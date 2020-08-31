@@ -14,6 +14,10 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * Provides read methods for Advertisers, HotelAdvertisers, Hotels and Cities from csv files.
+ * @author baturayucer.
+ */
 @Component
 public class DataReader {
 

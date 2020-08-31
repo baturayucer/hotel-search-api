@@ -11,6 +11,7 @@ import java.util.List;
 import static com.baturayucer.hotelsearch.rest.constant.WebControllerConstants.*;
 
 /**
+ * Controller Interface for Hotel Search Api.
  * @author baturayucer.
  */
 @RequestMapping(value = HOTEL_SEARCH_API)

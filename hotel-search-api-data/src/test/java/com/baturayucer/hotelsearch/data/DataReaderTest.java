@@ -14,6 +14,10 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * Test Class for @DataReader.class.
+ * @author baturayucer.
+ */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {DataReader.class})
 public class DataReaderTest {

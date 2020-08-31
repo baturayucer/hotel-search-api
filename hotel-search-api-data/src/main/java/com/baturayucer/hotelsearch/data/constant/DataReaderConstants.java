@@ -1,5 +1,9 @@
 package com.baturayucer.hotelsearch.data.constant;
 
+/**
+ * Constant class that contains data paths and file names.
+ * @author baturayucer.
+ */
 public class DataReaderConstants {
 
     private static final String RESOURCES = "src/main/resources/";

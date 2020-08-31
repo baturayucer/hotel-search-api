@@ -13,6 +13,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+/**
+ * Controller Implementation for SearchController.class.
+ * @author baturayucer.
+ */
 @RestController
 public class SearchControllerImpl implements SearchController {
 

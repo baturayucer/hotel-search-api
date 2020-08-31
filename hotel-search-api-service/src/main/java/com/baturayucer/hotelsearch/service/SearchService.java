@@ -6,6 +6,10 @@ import com.baturayucer.hotelsearch.service.model.UpdatePricesDto;
 
 import java.util.List;
 
+/**
+ * Hotel Search Api Service Interface.
+ * @author baturayucer.
+ */
 public interface SearchService {
 
     List<SearchOutputDto> searchDeals(SearchItemDto searchItemDto);

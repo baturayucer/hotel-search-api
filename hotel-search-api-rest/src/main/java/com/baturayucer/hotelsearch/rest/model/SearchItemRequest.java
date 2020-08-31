@@ -7,6 +7,10 @@ import lombok.Setter;
 import java.io.Serializable;
 import java.util.Date;
 
+/**
+ * Request class for /search endpoint.
+ * @author baturayucer.
+ */
 @Getter
 @Setter
 @NoArgsConstructor

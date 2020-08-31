@@ -7,7 +7,6 @@ import com.baturayucer.hotelsearch.data.model.HotelEntity;
 import com.baturayucer.hotelsearch.service.model.*;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.Named;
 import org.mapstruct.factory.Mappers;
 
 import java.text.ParseException;
@@ -15,6 +14,11 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+
+/**
+ * Mapper for SearchService.
+ * @author baturayucer.
+ */
 @Mapper
 public interface SearchServiceMapper {
 

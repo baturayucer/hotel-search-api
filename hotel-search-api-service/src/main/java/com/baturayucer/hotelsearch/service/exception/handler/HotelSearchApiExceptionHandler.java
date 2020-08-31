@@ -1,6 +1,5 @@
 package com.baturayucer.hotelsearch.service.exception.handler;
 
-import com.baturayucer.hotelsearch.data.exception.DataNotFoundException;
 import com.baturayucer.hotelsearch.service.exception.AdvertSearchException;
 import com.baturayucer.hotelsearch.service.exception.AdvertUpdateException;
 import org.springframework.http.HttpStatus;
@@ -8,6 +7,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+
+/**
+ * Global Exception Handler class for Hotel Search Api.
+ * @author baturayucer.
+ */
 @ControllerAdvice
 public class HotelSearchApiExceptionHandler {
 

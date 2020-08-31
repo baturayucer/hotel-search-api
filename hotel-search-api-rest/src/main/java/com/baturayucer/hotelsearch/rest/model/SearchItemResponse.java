@@ -8,6 +8,10 @@ import lombok.Setter;
 import java.io.Serializable;
 import java.util.List;
 
+/**
+ * Response class for /search endpoint.
+ * @author baturayucer.
+ */
 @Getter
 @Setter
 @NoArgsConstructor

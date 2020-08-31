@@ -5,6 +5,10 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * Entity class for City Objects.
+ * @author baturayucer.
+ */
 @Getter
 @Setter
 @JsonPropertyOrder({ "id", "cityName"})

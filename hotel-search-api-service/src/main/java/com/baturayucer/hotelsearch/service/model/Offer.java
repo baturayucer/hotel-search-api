@@ -4,6 +4,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * Dto object for Offer.
+ * @author baturayucer.
+ */
 @Getter
 @Setter
 @NoArgsConstructor
