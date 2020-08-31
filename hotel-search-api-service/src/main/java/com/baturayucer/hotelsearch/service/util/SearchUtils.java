@@ -1,10 +1,12 @@
 package com.baturayucer.hotelsearch.service.util;
 
+import com.baturayucer.hotelsearch.service.exception.AdvertSearchException;
 import com.baturayucer.hotelsearch.service.mapper.SearchServiceMapper;
 import com.baturayucer.hotelsearch.service.model.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public final class SearchUtils {
@@ -14,7 +16,7 @@ public final class SearchUtils {
     public static List<HotelDto> filterHotelsByCity(List<HotelDto> hotels, List<CityDto> cityList) {
 
         return hotels.parallelStream().filter(hotelDto -> {
-            String foundCityId = SearchUtils.findCityByHotel(cityList, hotelDto).getId();
+            String foundCityId = findCityByHotel(cityList, hotelDto).getId();
             return hotelDto.getCityId().equals(foundCityId);
         }).collect(Collectors.toList());
     }
@@ -23,14 +25,17 @@ public final class SearchUtils {
 
         return cities.parallelStream().
                 filter(cityDto -> cityDto.getId().equals(hotelDto.getCityId()))
-                .findAny().orElseThrow(RuntimeException::new);
+                .findAny().orElseThrow(() ->
+                        new AdvertSearchException("City could not found with given parameter"));
     }
 
     public static String findAdvertiserNameById(List<AdvertiserDto> advertisers, String advertiserId) {
 
         return advertisers.parallelStream()
                 .filter(advert -> advert.getId().equals(advertiserId))
-                .findAny().orElseThrow(RuntimeException::new).getAdvertiserName();
+                .findAny().orElseThrow(() ->
+                        new AdvertSearchException("Advertiser Name could not found with given Id"))
+                .getAdvertiserName();
     }
 
     public static List<Offer> findAvailableHotelOffers(
@@ -39,15 +44,34 @@ public final class SearchUtils {
 
         List<Offer> offerList = new ArrayList<>();
 
-        hotelAdvertisers.parallelStream().forEach(ad ->  {
-            if (ad.getHotelId().equals(hotelDto.getId()) &&
-                    searchItemDto.getStartDate().after(ad.getAvailabilityStartDate()) &&
-                    searchItemDto.getStartDate().before(ad.getAvailabilityEndDate())) {
-                Offer offer = mapper.toOffer(ad);
-                offer.setAdvertiser(findAdvertiserNameById(advertiserList, ad.getAdvertiserId()));
-                offerList.add(offer);
-            }
-        });
+        Predicate<HotelAdvertiserDto> areDatesAvailable = ad ->
+                searchItemDto.getStartDate().after(ad.getAvailabilityStartDate()) &&
+                searchItemDto.getStartDate().before(ad.getAvailabilityEndDate());
+
+        Predicate<HotelAdvertiserDto> isHotelSame = ad
+                -> ad.getHotelId().equals(hotelDto.getId());
+
+        Predicate<HotelAdvertiserDto> isHotelAvailable = ad
+                -> areDatesAvailable.test(ad) && isHotelSame.test(ad);
+
+        hotelAdvertisers.parallelStream().filter(isHotelAvailable)
+                .forEach(ad -> offerList.add(
+                        prepareOfferByAdvertiser(advertiserList, ad)));
         return offerList;
+    }
+
+    private static Offer prepareOfferByAdvertiser(List<AdvertiserDto> adverts,
+                                           HotelAdvertiserDto hotelAdvertiserDto) {
+
+        String advertiserName =
+                findAdvertiserNameById(adverts, hotelAdvertiserDto.getAdvertiserId());
+        Offer offer = mapper.toOffer(hotelAdvertiserDto);
+        offer.setAdvertiser(advertiserName);
+        return offer;
+    }
+
+    private SearchUtils() {
+
+        throw new IllegalStateException("This is a utility class.");
     }
 }
