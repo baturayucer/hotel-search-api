@@ -17,10 +17,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.baturayucer.hotelsearch.data.constant.DataReaderConstants.*;
 
+/**
+ * Hotel Search Api Service Implementation..
+ * @author baturayucer.
+ */
 @Service
 public class SearchServiceImpl implements SearchService {
 

@@ -6,6 +6,10 @@ import lombok.Getter;
 import lombok.Setter;
 
 
+/**
+ * Entity class for Hotel Objects.
+ * @author baturayucer.
+ */
 @Getter
 @Setter
 @JsonPropertyOrder(

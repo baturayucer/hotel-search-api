@@ -9,6 +9,10 @@ import org.apache.logging.log4j.Logger;
 import java.util.List;
 import java.util.function.Predicate;
 
+/**
+ * Util methods for updating adverts.
+ * @author baturayucer.
+ */
 public final class UpdateUtils {
 
     private static final Logger logger = LogManager.getLogger(UpdateUtils.class);

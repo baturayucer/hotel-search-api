@@ -6,6 +6,10 @@ import lombok.Setter;
 
 import java.util.List;
 
+/**
+ * Dto object for SearchOutput.
+ * @author baturayucer.
+ */
 @Getter
 @Setter
 @NoArgsConstructor

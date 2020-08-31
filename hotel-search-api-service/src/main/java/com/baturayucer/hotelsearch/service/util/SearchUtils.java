@@ -9,6 +9,11 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+
+/**
+ * Util methods for searching and sorting adverts.
+ * @author baturayucer.
+ */
 public final class SearchUtils {
 
     private static final SearchServiceMapper mapper = SearchServiceMapper.INSTANCE;

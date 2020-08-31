@@ -5,6 +5,10 @@ import lombok.Setter;
 
 import java.io.Serializable;
 
+/**
+ * Request class for /price endpoint.
+ * @author baturayucer.
+ */
 @Getter
 @Setter
 public class UpdatePricesRequest implements Serializable {
