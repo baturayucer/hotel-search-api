@@ -1,5 +1,6 @@
 package com.baturayucer.hotelsearch.service;
 
+import com.baturayucer.hotelsearch.service.config.DataConfig;
 import com.baturayucer.hotelsearch.service.mapper.SearchServiceMapper;
 import com.baturayucer.hotelsearch.service.model.*;
 import com.baturayucer.hotelsearch.service.util.SearchUtils;
@@ -44,6 +45,18 @@ public class SearchServiceImpl implements SearchService {
         return findDealsByHotel(dataConfig, searchItemDto);
     }
 
+    @Override
+    public List<UpdatePricesDto> updatePrices(List<UpdatePricesDto> updatePricesDtoList) {
+
+        synchronized (this) {
+
+            logger.info("Updating deals...");
+            updatePricesDtoList.parallelStream().forEach(updatePricesDto ->
+                    UpdateUtils.updateHotelAdvert(dataConfig.getHotelAdvertisers(), updatePricesDto));
+            return updatePricesDtoList;
+        }
+    }
+
     private synchronized List<SearchOutputDto> findDealsByHotel(
             DataConfig dataConfig, SearchItemDto searchParameters) {
 
@@ -70,17 +83,5 @@ public class SearchServiceImpl implements SearchService {
         searchOutputs.sort(compareByRating);
         logger.info("Searching completed");
         return searchOutputs;
-    }
-
-    @Override
-    public List<UpdatePricesDto> updatePrices(List<UpdatePricesDto> updatePricesDtoList) {
-
-        synchronized (this) {
-
-            logger.info("Updating deals...");
-            updatePricesDtoList.parallelStream().forEach(updatePricesDto ->
-                    UpdateUtils.updateHotelAdvert(dataConfig.getHotelAdvertisers(), updatePricesDto));
-            return updatePricesDtoList;
-        }
     }
 }

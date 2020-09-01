@@ -1,9 +1,12 @@
-package com.baturayucer.hotelsearch.service.model;
+package com.baturayucer.hotelsearch.service.config;
 
 import com.baturayucer.hotelsearch.data.DataReader;
 import com.baturayucer.hotelsearch.data.exception.DataNotFoundException;
-import com.baturayucer.hotelsearch.service.SearchServiceImpl;
 import com.baturayucer.hotelsearch.service.mapper.SearchServiceMapper;
+import com.baturayucer.hotelsearch.service.model.AdvertiserDto;
+import com.baturayucer.hotelsearch.service.model.CityDto;
+import com.baturayucer.hotelsearch.service.model.HotelAdvertiserDto;
+import com.baturayucer.hotelsearch.service.model.HotelDto;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.logging.log4j.LogManager;
