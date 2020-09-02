@@ -1,0 +1,73 @@
+openapi: 3.0.1
+info:
+  title: defaultTitle
+  description: defaultDescription
+  version: '0.1'
+servers:
+  - url: 'http://localhost:8080'
+paths:
+  /hotel-search-api/price:
+    post:
+      description: Auto generated using Swagger Inspector
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties: {}
+            examples:
+              '0':
+                value: |-
+                  [
+                      {
+                          "advertiserId": "23",
+                          "hotelId": "0",
+                          "cpc": "178",
+                          "price": "200",
+                          "currency": "EUR",
+                          "availabilityStartDate": "20200808",
+                          "availabilityEndDate": "20200812"
+                      }
+                  ]
+      responses:
+        '200':
+          description: Auto generated using Swagger Inspector
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+              examples:
+                '0':
+                  value: >-
+                    [{"advertiserId":"23","hotelId":"0","cpc":"178","price":"200","currency":"EUR","availabilityStartDate":"20200808","availabilityEndDate":"20200812"}]
+      servers:
+        - url: 'http://localhost:8080'
+    servers:
+      - url: 'http://localhost:8080'
+  /hotel-search-api/search:
+    get:
+      description: Auto generated using Swagger Inspector
+      parameters:
+        - name: city
+          in: query
+          schema:
+            type: string
+          example: Berlin
+        - name: endDate
+          in: query
+          schema:
+            type: string
+          example: '20200808'
+        - name: startDate
+          in: query
+          schema:
+            type: string
+          example: '20200806'
+      responses:
+        '200':
+          description: Auto generated using Swagger Inspector
+      servers:
+        - url: 'http://localhost:8080'
+    servers:
+      - url: 'http://localhost:8080'
