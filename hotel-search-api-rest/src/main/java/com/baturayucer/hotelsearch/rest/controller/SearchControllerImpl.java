@@ -20,7 +20,7 @@ import java.util.List;
 @RestController
 public class SearchControllerImpl implements SearchController {
 
-    private SearchService searchService;
+    private final SearchService searchService;
     private static final SearchItemMapper searchItemMapper = SearchItemMapper.INSTANCE;
 
     @Autowired

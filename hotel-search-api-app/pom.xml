@@ -6,12 +6,15 @@
 
     <parent>
         <groupId>com.baturayucer.hotelsearch</groupId>
-        <artifactId>hotel-search-api</artifactId>
+        <artifactId>hotel-search-api-parent</artifactId>
         <version>1.0-SNAPSHOT</version>
+        <relativePath>../hotel-search-api-parent</relativePath>
     </parent>
 
     <artifactId>hotel-search-api-app</artifactId>
-    <version>1.0-SNAPSHOT</version>
+
+    <name>HotelSearch App</name>
+    <description>App Module for Simple Hotel Search Api</description>
 
     <build>
         <plugins>
@@ -25,7 +28,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.5.1</version>
             </plugin>
         </plugins>
     </build>
@@ -34,7 +36,7 @@
         <dependency>
             <groupId>com.baturayucer.hotelsearch</groupId>
             <artifactId>hotel-search-api-rest</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
 

@@ -6,15 +6,21 @@
 
     <parent>
         <groupId>com.baturayucer.hotelsearch</groupId>
-        <artifactId>hotel-search-api</artifactId>
+        <artifactId>hotel-search-api-parent</artifactId>
         <version>1.0-SNAPSHOT</version>
+        <relativePath>../hotel-search-api-parent</relativePath>
     </parent>
 
     <artifactId>hotel-search-api-data</artifactId>
-    <version>1.0-SNAPSHOT</version>
-
 
     <name>HotelSearch Data</name>
     <description>Data Module for Simple Hotel Search Api</description>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.fasterxml.jackson.dataformat</groupId>
+            <artifactId>jackson-dataformat-csv</artifactId>
+        </dependency>
+    </dependencies>
 
 </project>
